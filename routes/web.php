@@ -13,6 +13,15 @@ Route::get('/', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('dashboard', function () {
+
+        $selectedUser = User::where('selected', true)->get();
+
+        if(!$selectedUser){
+            $availableUsers = User::where('finished', false)->get();
+            $selectedUser = $availableUsers->random();
+            $selectedUser->update(['selected' => true]);
+        }
+
         $users = User::all();
 
         return Inertia::render('Dashboard', [
