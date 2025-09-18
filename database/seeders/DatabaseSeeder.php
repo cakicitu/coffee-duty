@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
             'name' => 'Türker Cakici',
             'email' => 'tuerker.cakici@web.de',
             'password' => 'admin',
-            'isAdmin' => 'true'
+            'isAdmin' => true,
+            'selected' => true,
+            'finished' => false
         ]);
     }
 }
