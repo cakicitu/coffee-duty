@@ -18,7 +18,7 @@ Route::get('dashboard', function () {
 
         if(!$selectedUser){
             $availableUsers = User::where('finished', false)->get();
-            $selectedUser = $availableUsers->random();
+            $selectedUser = $availableUsers->first();
             $selectedUser->update(['selected' => true]);
         }
 
