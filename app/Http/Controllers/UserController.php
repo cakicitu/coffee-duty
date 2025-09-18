@@ -56,4 +56,36 @@ class UserController extends Controller
         // ]);
         // return redirect('/dashboard');
     }
+    public function toggleSelected($id)
+    {
+        $user = User::find($id);
+        $user->selected = !$user->selected;
+        $user->save();
+
+        
+        // Return all users
+        $allUsers = User::all();
+
+        return response()->json([
+            'success' => true,
+            'users' => $allUsers,
+            'selected_user' => $user
+        ]);
+    }
+
+     public function toggleFinished($id)
+    {
+        $user = User::find($id);
+        $user->finished =  !$user->finished;
+        $user->save();
+
+        
+        // Return all users
+        $allUsers = User::all();
+
+        return response()->json([
+            'success' => true,
+            'users' => $allUsers
+        ]);
+    }
 }

@@ -9,3 +9,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth');
 
 Route::post('/user/job/select', [UserController::class, 'selectJob']);
+Route::post('/user/{id}/toggle/finished', [UserController::class, 'toggleFinished']);
+Route::post('/user/{id}/toggle/selected', [UserController::class, 'toggleSelected']);
