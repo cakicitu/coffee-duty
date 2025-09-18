@@ -134,7 +134,8 @@ const toggleSelected = async (user) => {
                     <div class="button" @click="selectNewCoffeeGetter" v-if="coffeeGetter && coffeeGetter.id == me.id">I got the coffee</div>
                     <div class="user-container">
                         <div class="users" :class="{green: user.finished}" v-for="user in users" :key="user.id">
-                            <p :class="{highlight: user.id == me.id}">{{ user.name }}</p>
+                            <p :class="{highlight: user.id == me.id}">{{ user.id }}. {{ user.name }}</p>
+                            <p>got {{ user.count }} beans</p>
                             <div class="toogle-selected"  @click="toggleSelected(user)" v-if="me.isAdmin">
                                 toggle selected
                             </div>

@@ -17,7 +17,7 @@ class UserController extends Controller
     public function selectJob()
     {
         // Set the currently selected user to finished and not selected
-        User::where('selected', true)->update([
+        User::where('selected', true)->increment('count', 1, [
             'selected' => false,
             'finished' => true
         ]);
@@ -37,7 +37,7 @@ class UserController extends Controller
         }
 
         // Randomly select one user from available users
-        $selectedUser = $availableUsers->random();
+        $selectedUser = $availableUsers->first();
         
         // Set the selected user as selected
         $selectedUser->update(['selected' => true]);
@@ -76,6 +76,9 @@ class UserController extends Controller
      public function toggleFinished($id)
     {
         $user = User::find($id);
+        if (!$user->finished){
+            $user->count =  $user->count + 1;
+        }
         $user->finished =  !$user->finished;
         $user->save();
 
