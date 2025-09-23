@@ -56,6 +56,37 @@ class UserController extends Controller
         // ]);
         // return redirect('/dashboard');
     }
+    public function getAllUsers()
+    {
+        // Get all users where finished is false
+        $availableUsers = User::where('finished', false)->get();
+
+        if ($availableUsers->isEmpty()) {
+            // If no users are available (all finished), reset all users and start over
+            User::query()->update([
+                'finished' => false,
+                'selected' => false
+            ]);
+            
+            // Get all users again
+            $availableUsers = User::all();
+        }
+
+        // Randomly select one user from available users
+        $selectedUser = $availableUsers->first();
+        
+        // Set the selected user as selected
+        $selectedUser->update(['selected' => true]);
+
+        // Return all users
+        $allUsers = User::all();
+
+        return response()->json([
+            'success' => true,
+            'users' => $allUsers,
+            'selected_user' => $selectedUser
+        ]);
+    }
     public function toggleSelected($id)
     {
         $user = User::find($id);

@@ -20,7 +20,6 @@ Route::get('dashboard', function () {
             $availableUsers = User::where('finished', false)->get();
             if (!$availableUsers || !count($availableUsers)){
                 $availableUsers = User::all();
-
             }
             $selectedUser = $availableUsers->first();
             $selectedUser->update(['selected' => true]);
