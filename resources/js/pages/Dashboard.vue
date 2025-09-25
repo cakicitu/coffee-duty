@@ -27,6 +27,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 let me = computed(() => page.props.auth.user)
 // let users = computed(() => page.props.users)
 let users = ref<User[]>(page.props.users as User[])
+console.log("USERS", users)
 let coffeeGetter = computed(() => users.value.find((user: User) => user.selected))
 
 const selectNewCoffeeGetter = async () => {
@@ -118,6 +119,36 @@ const toggleSelected = async (user) => {
         console.error('Error selecting new coffee getter:', error);
     }
 }
+
+const addDrank = async (user) => {
+    try {
+        const response = await fetch('/api/user/'+user.id+'/add/drank', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify({})
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success) {
+            // Update users data with the response
+            users.value = data.users;
+            console.log('New coffee getter selected successfully');
+        } else {
+            console.error('Error selecting new coffee getter:', data);
+        }
+    } catch (error) {
+        console.error('Error selecting new coffee getter:', error);
+    }
+}
 </script>
 
 <template>
@@ -135,12 +166,16 @@ const toggleSelected = async (user) => {
                     <div class="user-container">
                         <div class="users" :class="{green: user.finished}" v-for="user in users" :key="user.id">
                             <p :class="{highlight: user.id == me.id}">{{ user.id }}. {{ user.name }}</p>
-                            <p>got {{ user.count }} beans</p>
+                            <p>got {{ user.count }} beans</p> 
+                            <p>drank {{ user.drank }} cups</p>
                             <div class="toogle-selected"  @click="toggleSelected(user)" v-if="me.isAdmin">
                                 toggle selected
                             </div>
                              <div class="toogle-finished"  @click="toggleFinished(user)" v-if="me.isAdmin">
                                 toggle finished
+                            </div>
+                            <div class="add-drank"  @click="addDrank(user)" v-if="me.isAdmin">
+                                add drank
                             </div>
                         </div>
                     </div>
@@ -199,6 +234,13 @@ const toggleSelected = async (user) => {
     margin: 5px 0;
     cursor: pointer;
     background-color: rgb(21, 187, 21);
+    padding: 7px 12px;
+    border-radius: 10px;
+}
+.add-drank{
+    margin: 5px 0;
+    cursor: pointer;
+    background-color: rgb(253, 49, 49);
     padding: 7px 12px;
     border-radius: 10px;
 }

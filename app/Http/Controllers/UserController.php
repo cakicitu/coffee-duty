@@ -122,4 +122,19 @@ class UserController extends Controller
             'users' => $allUsers
         ]);
     }
+
+     public function addDrank($id)
+    {
+        $user = User::find($id);
+        $user->drank =  $user->drank + 1;
+        $user->save();
+
+        // Return all users
+        $allUsers = User::all();
+
+        return response()->json([
+            'success' => true,
+            'users' => $allUsers
+        ]);
+    }
 }
