@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
@@ -42,6 +43,23 @@ class UserController extends Controller
         // Set the selected user as selected
         $selectedUser->update(['selected' => true]);
 
+        if($selectedUser->id == 1){
+            $this->sendPush("13");
+        }else if (selectedUser->id == 2){
+            $this->sendPush("14");
+        }else if (selectedUser->id == 3){
+            $this->sendPush("15");
+        }else if (selectedUser->id == 4){
+            $this->sendPush("16");
+        }else if (selectedUser->id == 5){
+            $this->sendPush("17");
+        }else if (selectedUser->id == 6){
+            $this->sendPush("18");
+        }else if (selectedUser->id == 7){
+            $this->sendPush("19");
+        }
+
+
         // Return all users
         $allUsers = User::all();
 
@@ -56,6 +74,17 @@ class UserController extends Controller
         // ]);
         // return redirect('/dashboard');
     }
+
+    function sendPush($id){
+       $response = Http::withHeaders([
+                'accept' => 'application/json',
+                'X-API-Key' => '2zMDIIrs4vQBhYSb1HwiQbIzLPRQv55E0XkxWzPd7BBZNKDq'
+            ])
+            ->withoutVerifying()
+            ->get('https://10.32.244.187:8089/api-admin/api/v1/resources/1/io-configs/' . $id . '/set/true');
+        return $response;
+    }
+
     public function getAllUsers()
     {
         // Get all users where finished is false
