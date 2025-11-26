@@ -8,6 +8,12 @@ use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
 
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Features;
+
+
 class UserController extends Controller
 {
     /**
@@ -166,4 +172,33 @@ class UserController extends Controller
             'users' => $allUsers
         ]);
     }
+
+    /**
+     * Handle an API login request.
+     */
+    public function login(LoginRequest $request): JsonResponse
+    {
+        try {
+            $user = $request->validateCredentials();
+            // Return the authenticated user
+            return response()->json([
+                'success' => true,
+                'user' => $user,
+                'message' => 'Login successful'
+            ], 200);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid credentials',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during login'
+            ], 500);
+        }
+    }
+
 }
