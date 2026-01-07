@@ -27,7 +27,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// let users = ["Andres D.", "Andreas P.", "Sascha", "Moritz", "Türker", "Volker"]
 let me = computed(() => page.props.auth.user)
 // let users = computed(() => page.props.users)
 let users = ref<User[]>(page.props.users as User[])

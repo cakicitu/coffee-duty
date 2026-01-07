@@ -44,11 +44,11 @@ class UserController extends Controller
             $availableUsers = User::all();
         }
 
-        // Randomly select one user from available users
-        $selectedUser = $availableUsers->first();
-        
-        // Set the selected user as selected
-        $selectedUser->update(['selected' => true]);
+        // Randomly select one user from available users => changed to one with highest drank
+ 
+        $selectedUser = $availableUsers->sortByDesc('drank')->first();
+        $total = $selectedUser->total + $selectedUser->drank;
+        $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
 
         if($selectedUser->id == 1){
             $this->sendPush("13");
@@ -94,25 +94,24 @@ class UserController extends Controller
 
     public function getAllUsers()
     {
-        // Get all users where finished is false
-        $availableUsers = User::where('finished', false)->get();
 
+        $selectedUser = User::where('selected', true)->first();
+
+        $availableUsers = User::where('finished', false)->get();
         if ($availableUsers->isEmpty()) {
-            // If no users are available (all finished), reset all users and start over
             User::query()->update([
                 'finished' => false,
                 'selected' => false
             ]);
             
-            // Get all users again
             $availableUsers = User::all();
         }
-
-        // Randomly select one user from available users
-        $selectedUser = $availableUsers->first();
-        
-        // Set the selected user as selected
-        $selectedUser->update(['selected' => true]);
+      
+        if(!$selectedUser){
+            $selectedUser = $availableUsers->sortByDesc('drank')->first();
+            $total = $selectedUser->total + $selectedUser->drank;
+            $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
+        }
 
         // Return all users
         $allUsers = User::all();

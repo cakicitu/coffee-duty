@@ -15,16 +15,24 @@ Route::get('/', function () {
 
 Route::get('dashboard', function () {
 
-        $selectedUser = User::where('selected', true)->get();
+        $selectedUser = User::where('selected', true)->first();
 
-        if(!$selectedUser){
-            $availableUsers = User::where('finished', false)->get();
-            if (!$availableUsers || !count($availableUsers)){
-                $availableUsers = User::all();
-            }
-            $selectedUser = $availableUsers->first();
-            $selectedUser->update(['selected' => true]);
+        $availableUsers = User::where('finished', false)->get();
+        if ($availableUsers->isEmpty()) {
+            User::query()->update([
+                'finished' => false,
+                'selected' => false
+            ]);
+            
+            $availableUsers = User::all();
         }
+      
+        if(!$selectedUser){
+            $selectedUser = $availableUsers->sortByDesc('drank')->first();
+            $total = $selectedUser->total + $selectedUser->drank;
+            $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
+        }
+
 
         $users = User::all();
 
