@@ -171,6 +171,7 @@ const addDrank = async (user: User) => {
                             <p :class="{highlight: user.id == me.id}">{{ user.id }}. {{ user.name }}</p>
                             <p>got {{ user.count }} beans</p> 
                             <p>drank {{ user.drank }} cups</p>
+                            <p>total {{ user.total }} cups</p>
                             <div class="toogle-selected"  @click="toggleSelected(user)" v-if="me.isAdmin">
                                 toggle selected
                             </div>

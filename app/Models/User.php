@@ -24,7 +24,8 @@ class User extends Authenticatable
         'password',
         'selected',
         'finished',
-        'drank'
+        'drank',
+        'total'
     ];
 
     /**
