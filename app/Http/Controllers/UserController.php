@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Bean;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Inertia\Inertia;
@@ -164,7 +165,10 @@ class UserController extends Controller
         $user->drank =  $user->drank + 1;
         $user->save();
 
-        // Return all users
+        $currentBeans = Bean::where("finished", false)->first();
+        $currentBeans->count = $currentBeans->count + 1; 
+        $currentBeans->save();
+
         $allUsers = User::all();
 
         return response()->json([

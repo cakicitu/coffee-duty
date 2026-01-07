@@ -13,6 +13,10 @@ interface User {
     email: string;
     selected: boolean;
     finished: boolean;
+    count: BigInteger;
+    drank: BigInteger;
+    total: BigInteger;
+    isAdmin: boolean;
 }
 
 const page = usePage()
@@ -60,7 +64,7 @@ const selectNewCoffeeGetter = async () => {
     }
 }
 
-const toggleFinished = async (user) => {
+const toggleFinished = async (user: User) => {
     try {
         const response = await fetch('/api/user/'+user.id+'/toggle/finished', {
             method: 'POST',
@@ -90,7 +94,7 @@ const toggleFinished = async (user) => {
     }
 }
 
-const toggleSelected = async (user) => {
+const toggleSelected = async (user: User) => {
     try {
         const response = await fetch('/api/user/'+user.id+'/toggle/selected', {
             method: 'POST',
@@ -120,7 +124,7 @@ const toggleSelected = async (user) => {
     }
 }
 
-const addDrank = async (user) => {
+const addDrank = async (user: User) => {
     try {
         const response = await fetch('/api/user/'+user.id+'/add/drank', {
             method: 'POST',

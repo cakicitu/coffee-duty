@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\User;
+use App\Models\Bean;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -32,6 +33,18 @@ Route::get('dashboard', function () {
         ]);
         
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('beans', function () {
+
+        $beans = Bean::orderBy('id', 'desc')->get();
+        $currentBeans = Bean::where("finished", false)->first();
+
+        return Inertia::render('Beans', [
+            'currentBeans' => $currentBeans,
+            'beans' => $beans
+        ]);
+        
+})->middleware(['auth', 'verified'])->name('beans');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

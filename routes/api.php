@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BeanController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -13,5 +14,9 @@ Route::post('/user/job/select', [UserController::class, 'selectJob']);
 Route::post('/user/{id}/toggle/finished', [UserController::class, 'toggleFinished']);
 Route::post('/user/{id}/toggle/selected', [UserController::class, 'toggleSelected']);
 Route::post('/user/{id}/add/drank', [UserController::class, 'addDrank']);
+
+Route::get('/bean', [BeanController::class, 'index']);
+Route::post('/bean', [BeanController::class, 'store']);
+
 
 Route::post('/login', [UserController::class, 'login']);
