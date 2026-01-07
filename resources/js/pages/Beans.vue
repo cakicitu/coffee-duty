@@ -84,7 +84,7 @@ const createNewBeanRotation = async () => {
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                 <div class="body">
                     <div class="title">
-                        <h1 style="font-size: 20px;" v-if="currentBeans">The <b style="color: rgb(78, 75, 240);">current</b> Beans are currently in for: {{ currentBeans.lasted }} days.</h1>
+                        <h1 style="font-size: 20px;" v-if="currentBeans">The <b style="color: rgb(78, 75, 240);">current</b> Beans are in for: {{ currentBeans.lasted }} days.</h1>
                         <span v-else>There arent beans in the machine.</span>
                         <h1 style="font-size: 20px;" v-if="beans.length > 1"><b style="color: rgb(21, 187, 21);">New</b> Beans are due in: {{ dueDate }} days.</h1>
                         <span v-else>The forecast is available as soon as there is one full rotation.</span>
