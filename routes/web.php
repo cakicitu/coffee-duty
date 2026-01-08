@@ -17,16 +17,8 @@ Route::get('dashboard', function () {
 
         $selectedUser = User::where('selected', true)->first();
 
-        $availableUsers = User::where('finished', false)->get();
-        if ($availableUsers->isEmpty()) {
-            User::query()->update([
-                'finished' => false,
-                'selected' => false
-            ]);
-            
-            $availableUsers = User::all();
-        }
-      
+        $availableUsers = User::all();
+
         if(!$selectedUser){
             $selectedUser = $availableUsers->sortByDesc('drank')->first();
             $total = $selectedUser->total + $selectedUser->drank;

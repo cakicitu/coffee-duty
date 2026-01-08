@@ -27,25 +27,13 @@ class UserController extends Controller
         // Set the currently selected user to finished and not selected
         User::where('selected', true)->increment('count', 1, [
             'selected' => false,
-            'finished' => true
+            'finished' => false
         ]);
 
         // Get all users where finished is false
-        $availableUsers = User::where('finished', false)->get();
-
-        if ($availableUsers->isEmpty()) {
-            // If no users are available (all finished), reset all users and start over
-            User::query()->update([
-                'finished' => false,
-                'selected' => false
-            ]);
-            
-            // Get all users again
-            $availableUsers = User::all();
-        }
+        $availableUsers = User::all();
 
         // Randomly select one user from available users => changed to one with highest drank
- 
         $selectedUser = $availableUsers->sortByDesc('drank')->first();
         $total = $selectedUser->total + $selectedUser->drank;
         $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
@@ -97,15 +85,7 @@ class UserController extends Controller
 
         $selectedUser = User::where('selected', true)->first();
 
-        $availableUsers = User::where('finished', false)->get();
-        if ($availableUsers->isEmpty()) {
-            User::query()->update([
-                'finished' => false,
-                'selected' => false
-            ]);
-            
-            $availableUsers = User::all();
-        }
+        $availableUsers = User::all();
       
         if(!$selectedUser){
             $selectedUser = $availableUsers->sortByDesc('drank')->first();
@@ -142,12 +122,7 @@ class UserController extends Controller
      public function toggleFinished($id)
     {
         $user = User::find($id);
-        if (!$user->finished){
-            $user->count =  $user->count + 1;
-        }
-        $user->finished =  !$user->finished;
-        $user->save();
-
+        $user->count =  $user->count + 1;
         
         // Return all users
         $allUsers = User::all();
