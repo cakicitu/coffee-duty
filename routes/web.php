@@ -46,5 +46,13 @@ Route::get('beans', function () {
         
 })->middleware(['auth', 'verified'])->name('beans');
 
+Route::get('help', function () {
+
+        return Inertia::render('Help', [
+        ]);
+        
+})->middleware(['auth', 'verified'])->name('help');
+
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
