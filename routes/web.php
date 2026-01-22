@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\User;
+use App\Models\Like;
+use App\Models\Dislike;
 use App\Models\Bean;
 
 Route::get('/', function () {
@@ -36,10 +38,15 @@ Route::get('dashboard', function () {
 
 Route::get('beans', function () {
 
-        $beans = Bean::orderBy('id', 'desc')->get();
+        $beans = Bean::with('likes', 'dislikes')->orderBy('id', 'desc')->get();
         $currentBeans = Bean::where("finished", false)->first();
+        $myLike = Like::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
+        $myDislike = Dislike::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
+
+        $hasEval = ($myLike ||  $myDislike);
 
         return Inertia::render('Beans', [
+            'hasEval' => $hasEval,
             'currentBeans' => $currentBeans,
             'beans' => $beans
         ]);

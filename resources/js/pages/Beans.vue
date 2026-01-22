@@ -14,8 +14,22 @@ interface Bean {
     lasted: number;      
     count: number;     
     total: number;    
+    likes: Like[];
+    dislikes: Dislike[];
     created_at: EpochTimeStamp;
     finished_at: EpochTimeStamp;
+}
+
+interface Like {
+    id: number;
+    user_id: number;      
+    bean_id: number;      
+}
+
+interface Dislike {
+    id: number;
+    user_id: number;      
+    bean_id: number;      
 }
 
 const page = usePage()
@@ -27,16 +41,28 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 let beans = ref<Bean[]>(page.props.beans as Bean[])
+
+let hasEval = page.props.hasEval
+
 let currentBeans = ref<Bean>(page.props.currentBeans as Bean)
 
+console.log("BEAN", beans)
+// let likes = ref<Like[]>(page.props.beans as Bean[])
+
+
 let averageDuration = computed(() => {
-    const finishedBeans = beans.value.filter(bean => bean.finished);
-    
-    if (finishedBeans.length === 0) return 0;
-    
-    const totalLasted = finishedBeans.reduce((sum, bean) => sum + bean.lasted, 0);
-    
-    return totalLasted / finishedBeans.length;
+    if (beans){
+        const finishedBeans = beans.value.filter(bean => bean.finished);
+        
+        if (!beans || finishedBeans.length === 0) return 0;
+        
+        const totalLasted = finishedBeans.reduce((sum, bean) => sum + bean.lasted, 0);
+        
+        return totalLasted / finishedBeans.length;
+    }else{
+        return 0
+    }
+
 });
 
 let dueDate = computed(() => {
@@ -52,7 +78,7 @@ const createNewBeanRotation = async () => {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
             },
             credentials: 'include',
-            body: JSON.stringify({})
+            body: JSON.stringify({beanId: currentBeans.value.id})
         });
 
         if (!response.ok) {
@@ -74,6 +100,62 @@ const createNewBeanRotation = async () => {
         console.error('Error creating new bean rotation:', error);
     }
 }
+
+const likeCurrentBeans = async () => {
+    try {
+        const response = await fetch('/api/like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify({beanId: currentBeans.value.id})
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data) {
+            location.reload();
+        } else {
+            console.error('Error selecting new coffee getter:', data);
+        }
+    } catch (error) {
+        console.error('Error creating new bean rotation:', error);
+    }
+}
+
+const dislikeCurrentBeans = async () => {
+    try {
+        const response = await fetch('/api/dislike', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            },
+            credentials: 'include',
+            body: JSON.stringify({beanId: currentBeans.value.id})
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data) {
+            location.reload();
+        } else {
+            console.error('Error selecting new coffee getter:', data);
+        }
+    } catch (error) {
+        console.error('Error creating new bean rotation:', error);
+    }
+}
 </script>
 
 <template>
@@ -86,10 +168,21 @@ const createNewBeanRotation = async () => {
                     <div class="title">
                         <h1 style="font-size: 20px;" v-if="currentBeans">The <b style="color: rgb(78, 75, 240);">current</b> Beans are in for: {{ currentBeans.lasted }} days.</h1>
                         <span v-else>There arent beans in the machine.</span>
-                        <h1 style="font-size: 20px;" v-if="beans.length > 1"><b style="color: rgb(21, 187, 21);">New</b> Beans are due in: {{ dueDate }} days.</h1>
+                        <h1 style="font-size: 20px;" v-if="beans && beans.length > 1"><b style="color: rgb(21, 187, 21);">New</b> Beans are due in: {{ dueDate }} days.</h1>
                         <span v-else>The forecast is available as soon as there is one full rotation.</span>
                     </div>
                     <div class="button" @click="createNewBeanRotation">I put in new beans</div>
+
+                    <div class="eval_area" v-if="!hasEval">
+                        <h1 style="font-size: 20px;" >Do you like the current beans?</h1>
+                        <div class="eval_button_area">
+                            <div class="eval_like_button" @click="likeCurrentBeans()">Like</div>
+                            <div class="eval_dislike_button" @click="dislikeCurrentBeans()">Dislike</div>           
+                        </div>
+                    </div>
+
+
+
                     <table>
                         <thead>
                             <tr>
@@ -97,6 +190,8 @@ const createNewBeanRotation = async () => {
                                 <td>count</td>
                                 <td>lasted</td>
                                 <td>finished</td>
+                                <td>likes</td>
+                                <td>dislikes</td>
                                 <td>created at</td>
                                 <td>finished at</td>
                             </tr>
@@ -107,6 +202,8 @@ const createNewBeanRotation = async () => {
                                 <td>{{ bean.count }} cups</td>
                                 <td>{{ bean.lasted }} days</td>
                                 <td>{{ bean.finished }}</td>
+                                <td>{{ bean && bean.likes.length }} </td>
+                                <td>{{ bean && bean.dislikes.length }} </td>
                                 <td>{{ bean.created_at }}</td>
                                 <td>{{ bean.finished_at }}</td>
                             </tr>
@@ -149,6 +246,33 @@ table{
     }
     td{
         padding: 5px 10px;
+    }
+}
+
+.eval_area{
+    margin: 20px;
+    
+    .eval_button_area{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+
+        .eval_like_button{
+            margin: 5px;
+            cursor: pointer;
+            background-color: rgb(21, 187, 21);
+            padding: 7px 12px;
+            border-radius: 10px;
+        }
+
+        .eval_dislike_button{
+            margin: 5px;
+            cursor: pointer;
+            background-color: rgb(255, 0, 0);
+            padding: 7px 12px;
+            border-radius: 10px;
+        }
     }
 }
 </style>

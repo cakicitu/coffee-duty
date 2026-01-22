@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BeanController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\DislikeController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,6 +19,9 @@ Route::post('/user/{id}/add/drank', [UserController::class, 'addDrank']);
 
 Route::get('/bean', [BeanController::class, 'index']);
 Route::post('/bean', [BeanController::class, 'store']);
+
+Route::post('/like', [LikeController::class, 'store'])->middleware(['auth']);
+Route::post('/dislike', [DislikeController::class, 'store'])->middleware(['auth']);
 
 
 Route::post('/login', [UserController::class, 'login']);

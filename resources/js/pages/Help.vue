@@ -40,6 +40,9 @@ const breadcrumbs: BreadcrumbItem[] = [
                         <b>Ich habe mir ein Kaffee geholt. Was mache ich nun?</b>Auf dem Display auf den eigenen Namen clicken <b>ODER</b> auf der Homepage auf "add Drank" clicken <b>ODER</b> in der Siedle App auf "Name +1" clicken.(Falls man kein QR-Code für die Siedle App braucht, bei Türker melden)               
                         <br>
                         <br>
+                        <b>Ich will die Kaffeebohnen bewerten. Wie mache ich das ?</b>Auf dem Homepage unter Beans ist folgede Frage zu sehen "Do you like the current beans?" sofern man noch keine Bewertung für diese Bohnen abgegeben hat. Durch betätigen des "Like" oder "Dislike" Buttons gibt man seine Bewertung ab. Diese ist nicht änderbar und auf 1 pro User pro Packung Bohnen begrenzt. Sobald die Bewertung abgegeben ist erscheint der Eintrag in der Tabelle under likes und dislikes.
+                        <br>
+                        <br>
                         <h1 style="font-size: 20px;" ">Weitere Infos</h1>
                         <b>Welche Infos stehen mir zu Verfügung ???</b>
                         <br>
