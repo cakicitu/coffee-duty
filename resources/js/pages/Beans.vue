@@ -40,6 +40,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+let showLikeButtons = ref(true);
+
 let beans = ref<Bean[]>(page.props.beans as Bean[])
 
 let hasEval = page.props.hasEval
@@ -93,6 +95,7 @@ const createNewBeanRotation = async () => {
             beans.value = data.beans;
             currentBeans.value = data.currentBeans;
             console.log('New bean rotation selected successfully');
+            location.reload();
         } else {
             console.error('Error selecting new coffee getter:', data);
         }
@@ -103,6 +106,7 @@ const createNewBeanRotation = async () => {
 
 const likeCurrentBeans = async () => {
     try {
+        showLikeButtons.value = false;
         const response = await fetch('/api/like', {
             method: 'POST',
             headers: {
@@ -131,6 +135,7 @@ const likeCurrentBeans = async () => {
 
 const dislikeCurrentBeans = async () => {
     try {
+        showLikeButtons.value = false;
         const response = await fetch('/api/dislike', {
             method: 'POST',
             headers: {
@@ -173,7 +178,7 @@ const dislikeCurrentBeans = async () => {
                     </div>
                     <div class="button" @click="createNewBeanRotation">I put in new beans</div>
 
-                    <div class="eval_area" v-if="!hasEval">
+                    <div class="eval_area" v-if="!hasEval && showLikeButtons">
                         <h1 style="font-size: 20px;" >Do you like the current beans?</h1>
                         <div class="eval_button_area">
                             <div class="eval_like_button" @click="likeCurrentBeans()">Like</div>
@@ -202,8 +207,8 @@ const dislikeCurrentBeans = async () => {
                                 <td>{{ bean.count }} cups</td>
                                 <td>{{ bean.lasted }} days</td>
                                 <td>{{ bean.finished }}</td>
-                                <td>{{ bean && bean.likes.length }} </td>
-                                <td>{{ bean && bean.dislikes.length }} </td>
+                                <td>{{ bean && bean.likes && bean.likes.length }} </td>
+                                <td>{{ bean && bean.dislikes && bean.dislikes.length }} </td>
                                 <td>{{ bean.created_at }}</td>
                                 <td>{{ bean.finished_at }}</td>
                             </tr>

@@ -26,14 +26,13 @@ class UserController extends Controller
     {
         // Set the currently selected user to finished and not selected
         User::where('selected', true)->increment('count', 1, [
-            'selected' => false,
-            'finished' => false
+            'selected' => false
         ]);
 
         // Get all users where finished is false
         $availableUsers = User::all();
 
-        // Randomly select one user from available users => changed to one with highest drank
+        // Get user with highest drank
         $selectedUser = $availableUsers->sortByDesc('drank')->first();
         $total = $selectedUser->total + $selectedUser->drank;
         $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);

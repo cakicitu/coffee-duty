@@ -26,7 +26,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
 ];
-
+let showGetCoffeeButton = ref(true);
 let me = computed(() => page.props.auth.user)
 // let users = computed(() => page.props.users)
 let users = ref<User[]>(page.props.users as User[])
@@ -165,7 +165,7 @@ const addDrank = async (user: User) => {
                         <h1 style="font-size: 20px;" v-if="coffeeGetter"><b>{{coffeeGetter.name}}</b> has to get the coffee.</h1>
                         <span v-else>Please choose a new coffee-getter.</span>
                     </div>
-                    <div class="button" @click="selectNewCoffeeGetter" v-if="coffeeGetter && coffeeGetter.id == me.id">I got the coffee</div>
+                    <div class="button" @click="selectNewCoffeeGetter" v-if="showGetCoffeeButton && coffeeGetter && coffeeGetter.id == me.id">I got the coffee</div>
                     <div class="user-container">
                         <div class="users" :class="{green: user.finished}" v-for="user in users" :key="user.id">
                             <p :class="{highlight: user.id == me.id}">{{ user.id }}. {{ user.name }}</p>
@@ -175,9 +175,9 @@ const addDrank = async (user: User) => {
                             <div class="toogle-selected"  @click="toggleSelected(user)" v-if="me.isAdmin">
                                 toggle selected
                             </div>
-                             <div class="toogle-finished"  @click="toggleFinished(user)" v-if="me.isAdmin">
+                             <!-- <div class="toogle-finished"  @click="toggleFinished(user)" v-if="me.isAdmin">
                                 toggle finished
-                            </div>
+                            </div> -->
                             <div class="add-drank"  @click="addDrank(user)" v-if="me.isAdmin">
                                 add drank
                             </div>

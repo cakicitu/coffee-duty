@@ -21,13 +21,6 @@ Route::get('dashboard', function () {
 
         $availableUsers = User::all();
 
-        if(!$selectedUser){
-            $selectedUser = $availableUsers->sortByDesc('drank')->first();
-            $total = $selectedUser->total + $selectedUser->drank;
-            $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
-        }
-
-
         $users = User::all();
 
         return Inertia::render('Dashboard', [

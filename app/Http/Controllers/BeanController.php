@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bean;
+use App\Models\Like;
+use App\Models\Dislike;
 use Illuminate\Http\Request;
 
 class BeanController extends Controller
@@ -12,10 +14,18 @@ class BeanController extends Controller
      */
     public function index()
     {
-        $beans = Bean::orderBy('id', 'desc')->get();
+        $beans = Bean::with('likes', 'dislikes')->orderBy('id', 'desc')->get();
         $currentBeans = Bean::where("finished", false)->first();
+        $myLike = Like::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
+        $myDislike = Dislike::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
 
-        return ["beans" => $beans, "currentBeans" => $currentBeans];
+        $hasEval = ($myLike ||  $myDislike);
+
+        return [
+            'hasEval' => $hasEval,
+            'currentBeans' => $currentBeans,
+            'beans' => $beans
+        ];
     }
 
     /**
@@ -41,10 +51,18 @@ class BeanController extends Controller
 
         Bean::create();
 
-        $beans = Bean::orderBy('id', 'desc')->get();
+        $beans = Bean::with('likes', 'dislikes')->orderBy('id', 'desc')->get();
         $currentBeans = Bean::where("finished", false)->first();
+        $myLike = Like::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
+        $myDislike = Dislike::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
 
-        return ["beans" => $beans, "currentBeans" => $currentBeans];
+        $hasEval = ($myLike ||  $myDislike);
+
+        return [
+            'hasEval' => $hasEval,
+            'currentBeans' => $currentBeans,
+            'beans' => $beans
+        ];
     }
 
     /**
