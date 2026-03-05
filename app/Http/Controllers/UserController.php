@@ -51,6 +51,8 @@ class UserController extends Controller
             $this->sendPush("18");
         }else if (selectedUser->id == 7){
             $this->sendPush("19");
+        }else if (selectedUser->id == 8){
+            $this->sendPush("39");
         }
 
 
