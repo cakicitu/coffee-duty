@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Bean;
 use App\Models\User;
-use App\Models\Like;
-use App\Models\Dislike;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 
@@ -71,13 +69,8 @@ class BeanController extends Controller
 
         $beans = Bean::with('likes', 'dislikes')->orderBy('id', 'desc')->get();
         $currentBeans = Bean::where("finished", false)->first();
-        $myLike = Like::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
-        $myDislike = Dislike::where("bean_id", $currentBeans->id)->where("user_id", auth()->user()->id)->first();
-
-        $hasEval = ($myLike ||  $myDislike);
 
         return [
-            'hasEval' => $hasEval,
             'currentBeans' => $currentBeans,
             'beans' => $beans
         ];
