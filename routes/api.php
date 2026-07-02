@@ -18,7 +18,7 @@ Route::post('/user/{id}/toggle/selected', [UserController::class, 'toggleSelecte
 Route::post('/user/{id}/add/drank', [UserController::class, 'addDrank']);
 
 Route::get('/bean', [BeanController::class, 'index']);
-Route::post('/bean', [BeanController::class, 'store']);
+Route::post('/bean', [BeanController::class, 'store'])->middleware(['auth']);
 
 Route::post('/like', [LikeController::class, 'store'])->middleware(['auth']);
 Route::post('/dislike', [DislikeController::class, 'store'])->middleware(['auth']);
