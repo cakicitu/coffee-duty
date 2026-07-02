@@ -37,24 +37,21 @@ class UserController extends Controller
         $total = $selectedUser->total + $selectedUser->drank;
         $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
 
-        if($selectedUser->id == 1){
-            $this->sendPush("13");
-        }else if (selectedUser->id == 2){
-            $this->sendPush("14");
-        }else if (selectedUser->id == 3){
-            $this->sendPush("15");
-        }else if (selectedUser->id == 4){
-            $this->sendPush("16");
-        }else if (selectedUser->id == 5){
-            $this->sendPush("17");
-        }else if (selectedUser->id == 6){
-            $this->sendPush("18");
-        }else if (selectedUser->id == 7){
-            $this->sendPush("19");
-        }else if (selectedUser->id == 8){
-            $this->sendPush("39");
-        }
+        // Map of user id => Siedle IO config id
+        $ioConfigMap = [
+            1 => "13",
+            2 => "14",
+            3 => "15",
+            4 => "16",
+            5 => "17",
+            6 => "18",
+            7 => "19",
+            8 => "39",
+        ];
 
+        if (isset($ioConfigMap[$selectedUser->id])) {
+            $this->sendPush($ioConfigMap[$selectedUser->id]);
+        }
 
         // Return all users
         $allUsers = User::all();
@@ -64,11 +61,6 @@ class UserController extends Controller
             'users' => $allUsers,
             'selected_user' => $selectedUser
         ]);
-        // return Inertia::render('Dashboard', [
-        //     'users' => $allUsers,
-        //     'selected_user' => $selectedUser
-        // ]);
-        // return redirect('/dashboard');
     }
 
     function sendPush($id){
@@ -132,6 +124,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->count =  $user->count + 1;
+        $user->save();
         
         // Return all users
         $allUsers = User::all();
