@@ -31,6 +31,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             // \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
         ]);
+
+        $middleware->alias([
+            'api.token' => \App\Http\Middleware\VerifyApiToken::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

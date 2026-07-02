@@ -11,17 +11,18 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth');
 
-Route::get('/user/all', [UserController::class, 'getAllUsers']);
-Route::post('/user/job/select', [UserController::class, 'selectJob']);
-Route::post('/user/{id}/toggle/finished', [UserController::class, 'toggleFinished']);
-Route::post('/user/{id}/toggle/selected', [UserController::class, 'toggleSelected']);
-Route::post('/user/{id}/add/drank', [UserController::class, 'addDrank']);
+Route::middleware('api.token')->group(function () {
+    Route::get('/user/all', [UserController::class, 'getAllUsers']);
+    Route::post('/user/job/select', [UserController::class, 'selectJob']);
+    Route::post('/user/{id}/toggle/finished', [UserController::class, 'toggleFinished']);
+    Route::post('/user/{id}/toggle/selected', [UserController::class, 'toggleSelected']);
+    Route::post('/user/{id}/add/drank', [UserController::class, 'addDrank']);
 
-Route::get('/bean', [BeanController::class, 'index']);
-Route::post('/bean', [BeanController::class, 'store']);
+    Route::get('/bean', [BeanController::class, 'index']);
+    Route::post('/bean', [BeanController::class, 'store']);
+});
 
 Route::post('/like', [LikeController::class, 'store'])->middleware(['auth']);
 Route::post('/dislike', [DislikeController::class, 'store'])->middleware(['auth']);
-
 
 Route::post('/login', [UserController::class, 'login']);

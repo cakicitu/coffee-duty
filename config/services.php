@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'siedle' => [
+        'api_key' => env('SIEDLE_API_KEY'),
+        'base_url' => env('SIEDLE_BASE_URL'),
+    ],
+
 ];

@@ -72,12 +72,20 @@ class UserController extends Controller
     }
 
     function sendPush($id){
-       $response = Http::withHeaders([
+        $apiKey = config('services.siedle.api_key');
+        $baseUrl = config('services.siedle.base_url');
+
+        // Push notifications are optional — skip if not configured
+        if (!$apiKey || !$baseUrl) {
+            return null;
+        }
+
+        $response = Http::withHeaders([
                 'accept' => 'application/json',
-                'X-API-Key' => '2zMDIIrs4vQBhYSb1HwiQbIzLPRQv55E0XkxWzPd7BBZNKDq'
+                'X-API-Key' => $apiKey
             ])
             ->withoutVerifying()
-            ->get('https://10.32.244.187:8089/api-admin/api/v1/resources/1/io-configs/' . $id . '/set/true');
+            ->get(rtrim($baseUrl, '/') . '/api-admin/api/v1/resources/1/io-configs/' . $id . '/set/true');
         return $response;
     }
 
