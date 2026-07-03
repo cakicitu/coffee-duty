@@ -30,7 +30,6 @@ let showGetCoffeeButton = ref(true);
 let me = computed(() => page.props.auth.user)
 // let users = computed(() => page.props.users)
 let users = ref<User[]>(page.props.users as User[])
-console.log("USERS", users)
 let coffeeGetter = computed(() => users.value.find((user: User) => user.selected))
 
 const selectNewCoffeeGetter = async () => {
@@ -54,7 +53,6 @@ const selectNewCoffeeGetter = async () => {
         if (data.success) {
             // Update users data with the response
             users.value = data.users;
-            console.log('New coffee getter selected successfully');
         } else {
             console.error('Error selecting new coffee getter:', data);
         }
@@ -84,7 +82,6 @@ const toggleFinished = async (user: User) => {
         if (data.success) {
             // Update users data with the response
             users.value = data.users;
-            console.log('New coffee getter selected successfully');
         } else {
             console.error('Error selecting new coffee getter:', data);
         }
@@ -114,7 +111,6 @@ const toggleSelected = async (user: User) => {
         if (data.success) {
             // Update users data with the response
             users.value = data.users;
-            console.log('New coffee getter selected successfully');
         } else {
             console.error('Error selecting new coffee getter:', data);
         }
@@ -144,7 +140,6 @@ const addDrank = async (user: User) => {
         if (data.success) {
             // Update users data with the response
             users.value = data.users;
-            console.log('New coffee getter selected successfully');
         } else {
             console.error('Error selecting new coffee getter:', data);
         }

@@ -48,7 +48,6 @@ let hasEval = page.props.hasEval
 
 let currentBeans = ref<Bean>(page.props.currentBeans as Bean)
 
-console.log("BEAN", beans)
 // let likes = ref<Like[]>(page.props.beans as Bean[])
 
 
@@ -91,10 +90,8 @@ const createNewBeanRotation = async () => {
         
         if (data) {
             // Update users data with the response
-            console.log("GOT DATA: ", data)
             beans.value = data.beans;
             currentBeans.value = data.currentBeans;
-            console.log('New bean rotation selected successfully');
             location.reload();
         } else {
             console.error('Error selecting new coffee getter:', data);

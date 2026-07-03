@@ -37,20 +37,9 @@ class UserController extends Controller
         $total = $selectedUser->total + $selectedUser->drank;
         $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
 
-        // Map of user id => Siedle IO config id
-        $ioConfigMap = [
-            1 => "13",
-            2 => "14",
-            3 => "15",
-            4 => "16",
-            5 => "17",
-            6 => "18",
-            7 => "19",
-            8 => "39",
-        ];
-
-        if (isset($ioConfigMap[$selectedUser->id])) {
-            $this->sendPush($ioConfigMap[$selectedUser->id]);
+        // Send push notification if the user has an IO config id assigned
+        if ($selectedUser->io_id) {
+            $this->sendPush($selectedUser->io_id);
         }
 
         // Return all users
