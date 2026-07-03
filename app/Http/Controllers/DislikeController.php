@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Dislike;
 use App\Models\Bean;
+use App\Models\Dislike;
 use Illuminate\Http\Request;
 
 class DislikeController extends Controller
@@ -39,9 +39,9 @@ class DislikeController extends Controller
         ]);
 
         $beans = Bean::orderBy('id', 'desc')->get();
-        $currentBeans = Bean::where("finished", false)->first();
+        $currentBeans = Bean::where('finished', false)->first();
 
-        return ["dislike" => $dislike, "currentBeans" => $currentBeans, "beans" => $beans];
+        return ['dislike' => $dislike, 'currentBeans' => $currentBeans, 'beans' => $beans];
     }
 
     /**

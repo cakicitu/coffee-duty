@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Bean;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Http;
-
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Bean;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
-use Laravel\Fortify\Features;
-
 
 class UserController extends Controller
 {
@@ -26,7 +21,7 @@ class UserController extends Controller
     {
         // Set the currently selected user to finished and not selected
         User::where('selected', true)->increment('count', 1, [
-            'selected' => false
+            'selected' => false,
         ]);
 
         // Get all users where finished is false
@@ -35,7 +30,7 @@ class UserController extends Controller
         // Get user with highest drank
         $selectedUser = $availableUsers->sortByDesc('drank')->first();
         $total = $selectedUser->total + $selectedUser->drank;
-        $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
+        $selectedUser->update(['selected' => true, 'total' => $total, 'drank' => 0]);
 
         // Send push notification if the user has an IO config id assigned
         if ($selectedUser->io_id) {
@@ -48,25 +43,27 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'users' => $allUsers,
-            'selected_user' => $selectedUser
+            'selected_user' => $selectedUser,
         ]);
     }
 
-    function sendPush($id){
+    public function sendPush($id)
+    {
         $apiKey = config('services.siedle.api_key');
         $baseUrl = config('services.siedle.base_url');
 
         // Push notifications are optional — skip if not configured
-        if (!$apiKey || !$baseUrl) {
+        if (! $apiKey || ! $baseUrl) {
             return null;
         }
 
         $response = Http::withHeaders([
-                'accept' => 'application/json',
-                'X-API-Key' => $apiKey
-            ])
+            'accept' => 'application/json',
+            'X-API-Key' => $apiKey,
+        ])
             ->withoutVerifying()
-            ->get(rtrim($baseUrl, '/') . '/api-admin/api/v1/resources/1/io-configs/' . $id . '/set/true');
+            ->get(rtrim($baseUrl, '/').'/api-admin/api/v1/resources/1/io-configs/'.$id.'/set/true');
+
         return $response;
     }
 
@@ -76,11 +73,11 @@ class UserController extends Controller
         $selectedUser = User::where('selected', true)->first();
 
         $availableUsers = User::all();
-      
-        if(!$selectedUser){
+
+        if (! $selectedUser) {
             $selectedUser = $availableUsers->sortByDesc('drank')->first();
             $total = $selectedUser->total + $selectedUser->drank;
-            $selectedUser->update(['selected' => true, "total" => $total, "drank" => 0]);
+            $selectedUser->update(['selected' => true, 'total' => $total, 'drank' => 0]);
         }
 
         // Return all users
@@ -89,56 +86,56 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'users' => $allUsers,
-            'selected_user' => $selectedUser
+            'selected_user' => $selectedUser,
         ]);
     }
+
     public function toggleSelected($id)
     {
         $user = User::find($id);
-        $user->selected = !$user->selected;
+        $user->selected = ! $user->selected;
         $user->save();
 
-        
         // Return all users
         $allUsers = User::all();
 
         return response()->json([
             'success' => true,
             'users' => $allUsers,
-            'selected_user' => $user
+            'selected_user' => $user,
         ]);
     }
 
-     public function toggleFinished($id)
+    public function toggleFinished($id)
     {
         $user = User::find($id);
-        $user->count =  $user->count + 1;
+        $user->count = $user->count + 1;
         $user->save();
-        
+
         // Return all users
         $allUsers = User::all();
 
         return response()->json([
             'success' => true,
-            'users' => $allUsers
+            'users' => $allUsers,
         ]);
     }
 
-     public function addDrank($id)
+    public function addDrank($id)
     {
         $user = User::find($id);
-        $user->drank =  $user->drank + 1;
+        $user->drank = $user->drank + 1;
         $user->save();
 
-        $currentBeans = Bean::where("finished", false)->first();
-        $currentBeans->count = $currentBeans->count + 1; 
+        $currentBeans = Bean::where('finished', false)->first();
+        $currentBeans->count = $currentBeans->count + 1;
         $currentBeans->save();
 
         $allUsers = User::all();
 
         return response()->json([
             'success' => true,
-            'users' => $allUsers
+            'users' => $allUsers,
         ]);
     }
 
@@ -149,25 +146,25 @@ class UserController extends Controller
     {
         try {
             $user = $request->validateCredentials();
+
             // Return the authenticated user
             return response()->json([
                 'success' => true,
                 'user' => $user,
-                'message' => 'Login successful'
+                'message' => 'Login successful',
             ], 200);
 
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials',
-                'errors' => $e->errors()
+                'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred during login'
+                'message' => 'An error occurred during login',
             ], 500);
         }
     }
-
 }

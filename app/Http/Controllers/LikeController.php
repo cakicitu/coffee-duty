@@ -3,24 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bean;
-use Illuminate\Http\Request;
 use App\Models\Like;
+use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -38,9 +34,9 @@ class LikeController extends Controller
         ]);
 
         $beans = Bean::orderBy('id', 'desc')->get();
-        $currentBeans = Bean::where("finished", false)->first();
+        $currentBeans = Bean::where('finished', false)->first();
 
-        return ["like" => $like, "currentBeans" => $currentBeans, "beans" => $beans];
+        return ['like' => $like, 'currentBeans' => $currentBeans, 'beans' => $beans];
     }
 
     /**

@@ -21,10 +21,10 @@ class DatabaseSeeder extends Seeder
             'password' => $password,
             'isAdmin' => true,
             'selected' => true,
-            'finished' => false
+            'finished' => false,
         ]);
 
-        if (!env('SEED_ADMIN_PASSWORD')) {
+        if (! env('SEED_ADMIN_PASSWORD')) {
             $this->command->warn("Generated admin password: {$password}");
         }
     }

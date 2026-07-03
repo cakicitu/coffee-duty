@@ -51,11 +51,11 @@ class RegisteredUserController extends Controller
 
     /**
      * Get all Users
-     *
      */
     public function get(Request $request)
     {
         $users = User::all();
+
         return to_route('dashboard', $user);
     }
 }

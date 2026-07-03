@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
-
     protected $fillable = [
         'user_id',
-        'bean_id'
+        'bean_id',
     ];
 
     public function user(): BelongsTo

@@ -8,7 +8,7 @@ class Dislike extends Model
 {
     protected $fillable = [
         'user_id',
-        'bean_id'
+        'bean_id',
     ];
 
     public function user(): BelongsTo

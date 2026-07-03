@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\BeanController;
+use App\Http\Controllers\DislikeController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\BeanController;
-use App\Http\Controllers\LikeController;
-use App\Http\Controllers\DislikeController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();

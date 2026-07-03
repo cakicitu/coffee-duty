@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Bean;
 use App\Models\User;
-use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 
 class BeanController extends Controller
@@ -15,12 +14,11 @@ class BeanController extends Controller
     public function index()
     {
         $beans = Bean::with('likes', 'dislikes')->orderBy('id', 'desc')->get();
-        $currentBeans = Bean::where("finished", false)->first();
-
+        $currentBeans = Bean::where('finished', false)->first();
 
         return [
             'currentBeans' => $currentBeans,
-            'beans' => $beans
+            'beans' => $beans,
         ];
     }
 
@@ -29,9 +27,9 @@ class BeanController extends Controller
      */
     public function store(Request $request)
     {
-        $oldBeans = Bean::where("finished", false)->first();
+        $oldBeans = Bean::where('finished', false)->first();
 
-        if ($oldBeans){
+        if ($oldBeans) {
             $oldBeans->finished = true;
             $oldBeans->finished_at = now();
             $oldBeans->save();
@@ -60,11 +58,11 @@ class BeanController extends Controller
         Bean::create();
 
         $beans = Bean::with('likes', 'dislikes')->orderBy('id', 'desc')->get();
-        $currentBeans = Bean::where("finished", false)->first();
+        $currentBeans = Bean::where('finished', false)->first();
 
         return [
             'currentBeans' => $currentBeans,
-            'beans' => $beans
+            'beans' => $beans,
         ];
     }
 }

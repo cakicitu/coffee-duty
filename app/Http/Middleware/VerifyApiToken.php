@@ -22,19 +22,19 @@ class VerifyApiToken
 
         $configured = config('app.api_token');
 
-        if (!$configured) {
+        if (! $configured) {
             return response()->json([
                 'success' => false,
-                'message' => 'API token not configured on server'
+                'message' => 'API token not configured on server',
             ], 503);
         }
 
         $provided = $request->header('X-Api-Token') ?? $request->bearerToken();
 
-        if (!$provided || !hash_equals($configured, $provided)) {
+        if (! $provided || ! hash_equals($configured, $provided)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
             ], 401);
         }
 

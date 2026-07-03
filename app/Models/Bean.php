@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\HasMany; 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bean extends Model
 {
-     /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     // use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
@@ -25,7 +25,6 @@ class Bean extends Model
 
     protected $appends = ['lasted'];
 
-
     /**
      * Get the attributes that should be cast.
      *
@@ -34,20 +33,21 @@ class Bean extends Model
     protected function casts(): array
     {
         return [
-                'finished_at' => 'datetime:Y-m-d H:i',
-                'created_at' => 'datetime:Y-m-d H:i',
-                'updated_at' => 'datetime:Y-m-d H:i',
-            ];
+            'finished_at' => 'datetime:Y-m-d H:i',
+            'created_at' => 'datetime:Y-m-d H:i',
+            'updated_at' => 'datetime:Y-m-d H:i',
+        ];
     }
 
-    protected function lasted(): Attribute 
+    protected function lasted(): Attribute
     {
         return Attribute::get(function () {
             $endDate = $this->finished_at ?? now();
+
             return round($this->created_at->diffInDays($endDate), 2);
         });
     }
-    
+
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
