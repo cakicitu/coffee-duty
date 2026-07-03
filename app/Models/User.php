@@ -26,7 +26,9 @@ class User extends Authenticatable
         'selected',
         'finished',
         'drank',
-        'total'
+        'total',
+        'count',
+        'io_id'
     ];
 
     /**
