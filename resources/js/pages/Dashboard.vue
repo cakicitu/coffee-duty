@@ -193,22 +193,27 @@ const addDrank = async (user: User) => {
 }
 .title{
     margin: 20px 0 30px;
+    padding: 0 12px;
+    text-align: center;
 }
 .user-container{
     width: 100%;
-    padding-top: 20px;
+    padding: 20px 10px 10px;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: center;
+    align-items: stretch;
     flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 .users{
-    margin: 6px;
+    margin: 0;
     border: 2px solid rgb(253, 49, 49);
     padding: 7px 12px;
     border-radius: 10px;
     min-width: 150px;
     text-align: center;
+    flex: 0 1 auto;
 }
 .green{
     border: 2px solid rgb(21, 187, 21);
@@ -242,5 +247,28 @@ const addDrank = async (user: User) => {
     background-color: rgb(253, 49, 49);
     padding: 7px 12px;
     border-radius: 10px;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    .user-container{
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px 12px 12px;
+        gap: 10px;
+    }
+    .users{
+        width: 100%;
+        min-width: 0;
+    }
+    .title h1{
+        font-size: 18px !important;
+    }
+    .button,
+    .toogle-selected,
+    .add-drank{
+        padding: 12px;
+        /* comfortable touch targets */
+    }
 }
 </style>

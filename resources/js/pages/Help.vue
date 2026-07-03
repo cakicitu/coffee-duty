@@ -73,5 +73,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     width: 100%;
     padding: 20px;
     text-align: left;
+    word-break: break-word;
+}
+
+@media (max-width: 640px) {
+    .help-text{
+        padding: 12px;
+        font-size: 15px;
+    }
+    .help-text h1{
+        font-size: 18px !important;
+    }
 }
 </style>

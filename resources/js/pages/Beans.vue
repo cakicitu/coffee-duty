@@ -185,32 +185,34 @@ const dislikeCurrentBeans = async () => {
 
 
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <td>name</td>
-                                <td>count</td>
-                                <td>lasted</td>
-                                <td>finished</td>
-                                <td>likes</td>
-                                <td>dislikes</td>
-                                <td>created at</td>
-                                <td>finished at</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="bean in beans" :class="{ active: !bean.finished }">
-                                <td>{{ bean.name }}</td>
-                                <td>{{ bean.count }} cups</td>
-                                <td>{{ bean.lasted }} days</td>
-                                <td>{{ bean.finished }}</td>
-                                <td>{{ bean && bean.likes && bean.likes.length }} </td>
-                                <td>{{ bean && bean.dislikes && bean.dislikes.length }} </td>
-                                <td>{{ bean.created_at }}</td>
-                                <td>{{ bean.finished_at }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>name</td>
+                                    <td>count</td>
+                                    <td>lasted</td>
+                                    <td>finished</td>
+                                    <td>likes</td>
+                                    <td>dislikes</td>
+                                    <td>created at</td>
+                                    <td>finished at</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="bean in beans" :class="{ active: !bean.finished }">
+                                    <td data-label="name">{{ bean.name }}</td>
+                                    <td data-label="count">{{ bean.count }} cups</td>
+                                    <td data-label="lasted">{{ bean.lasted }} days</td>
+                                    <td data-label="finished">{{ bean.finished }}</td>
+                                    <td data-label="likes">{{ bean && bean.likes && bean.likes.length }} </td>
+                                    <td data-label="dislikes">{{ bean && bean.dislikes && bean.dislikes.length }} </td>
+                                    <td data-label="created at">{{ bean.created_at }}</td>
+                                    <td data-label="finished at">{{ bean.finished_at }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -226,12 +228,19 @@ const dislikeCurrentBeans = async () => {
 }
 .title{
     margin: 20px 0 30px;
+    padding: 0 12px;
+    text-align: center;
 }
 .button{
     cursor: pointer;
     background-color: rgb(21, 187, 21);
     padding: 7px 12px;
     border-radius: 10px;
+}
+
+.table-wrap{
+    width: 100%;
+    overflow-x: auto;
 }
 
 table{
@@ -275,6 +284,51 @@ table{
             padding: 7px 12px;
             border-radius: 10px;
         }
+    }
+}
+
+/* Mobile: table collapses into stacked cards */
+@media (max-width: 768px) {
+    .title h1{
+        font-size: 17px !important;
+    }
+    .button{
+        padding: 12px 16px;
+    }
+    .eval_area .eval_button_area .eval_like_button,
+    .eval_area .eval_button_area .eval_dislike_button{
+        padding: 12px 20px;
+    }
+
+    table{
+        padding: 0 8px;
+    }
+    table thead{
+        display: none;
+    }
+    table tr{
+        display: block;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        padding: 8px 4px;
+    }
+    table tr.active{
+        border: 1px solid rgb(78, 75, 240);
+    }
+    table td{
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 4px 10px;
+        text-align: right;
+        word-break: break-word;
+    }
+    table td::before{
+        content: attr(data-label);
+        font-weight: 600;
+        text-align: left;
+        opacity: 0.7;
     }
 }
 </style>
