@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { dashboard, login, register } from '@/routes';
 import { Head, Link } from '@inertiajs/vue3';
 </script>
@@ -52,7 +51,7 @@ import { Head, Link } from '@inertiajs/vue3';
                     style="background-color: white;"
                     class="flex flex-1 items-center justify-center rounded-br-lg rounded-bl-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-tl-lg lg:rounded-br-none lg:p-20 dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"
                 >
-                    <AppLogoIcon class="size-32 fill-current text-black dark:text-white" />
+                    <img src="/images/coffee-duty-logo.png" alt="Coffee Duty" class="h-auto w-40 max-w-full" />
                 </div>
             </main>
         </div>
