@@ -319,7 +319,9 @@ const dislikeCurrentBeans = async () => {
     color: inherit;
     font-size: inherit;
     padding: 2px 6px;
-    width: 120px;
+    width: 80px;
+    max-width: 80px;
+    min-width: 60px;
     outline: none;
 }
 
@@ -350,7 +352,7 @@ const dislikeCurrentBeans = async () => {
 
 @media (max-width: 768px) {
     .inline-edit-input{
-        width: 100%;
+        width: 80px;
     }
     .new-beans-area{
         width: 100%;
