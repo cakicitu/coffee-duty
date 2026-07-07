@@ -67,4 +67,16 @@ class BeanController extends Controller
             'beans' => $beans,
         ];
     }
+
+    public function rename(Request $request, Bean $bean)
+    {
+        $request->validate(['name' => 'required|string|max:255']);
+
+        $bean->update(['name' => $request->input('name')]);
+
+        return [
+            'success' => true,
+            'bean' => $bean->fresh()->load('likes', 'dislikes'),
+        ];
+    }
 }

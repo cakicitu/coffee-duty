@@ -46,6 +46,9 @@ let beanName = ref('');
 
 let beans = ref<Bean[]>(page.props.beans as Bean[])
 
+let editingId = ref<number | null>(null);
+let editName = ref('');
+
 let hasEval = page.props.hasEval
 
 let currentBeans = ref<Bean>(page.props.currentBeans as Bean)
@@ -110,6 +113,36 @@ const createNewBeanRotation = async () => {
         console.error('Error creating new bean rotation:', error);
     }
 }
+
+const startEdit = (bean) => {
+    editingId.value = bean.id;
+    editName.value = bean.name ?? '';
+};
+
+const cancelEdit = () => {
+    editingId.value = null;
+    editName.value = '';
+};
+
+const saveName = async (bean) => {
+    if (!editName.value.trim()) { cancelEdit(); return; }
+    try {
+        const res = await fetch(`/api/bean/${bean.id}/rename`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '' },
+            credentials: 'include',
+            body: JSON.stringify({ name: editName.value.trim() })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.success) {
+            const idx = beans.value.findIndex(b => b.id === bean.id);
+            if (idx !== -1) beans.value[idx] = data.bean;
+        }
+    } catch (e) { console.error('Error renaming bean:', e); }
+    editingId.value = null;
+};
 
 const likeCurrentBeans = async () => {
     try {
@@ -214,7 +247,14 @@ const dislikeCurrentBeans = async () => {
                             </thead>
                             <tbody>
                                 <tr v-for="bean in beans" :class="{ active: !bean.finished }">
-                                    <td data-label="name">{{ bean.name }}</td>
+                                    <td data-label="name" @click="startEdit(bean)" style="cursor:pointer;">
+                                        <template v-if="editingId === bean.id">
+                                            <input v-model="editName" class="inline-edit-input" @keyup.enter="saveName(bean)" @blur="saveName(bean)" @keyup.escape="cancelEdit" autofocus />
+                                        </template>
+                                        <template v-else>
+                                            {{ bean.name }}
+                                        </template>
+                                    </td>
                                     <td data-label="count">{{ bean.count }} cups</td>
                                     <td data-label="lasted">{{ bean.lasted }} days</td>
                                     <td data-label="finished">{{ bean.finished }}</td>
@@ -269,6 +309,17 @@ const dislikeCurrentBeans = async () => {
     border-color: rgb(78, 75, 240);
 }
 
+.inline-edit-input{
+    background: transparent;
+    border: 1px solid rgb(78, 75, 240);
+    border-radius: 4px;
+    color: inherit;
+    font-size: inherit;
+    padding: 2px 6px;
+    width: 120px;
+    outline: none;
+}
+
 .button{
     cursor: pointer;
     background-color: rgb(21, 187, 21);
@@ -277,6 +328,9 @@ const dislikeCurrentBeans = async () => {
 }
 
 @media (max-width: 768px) {
+    .inline-edit-input{
+        width: 100%;
+    }
     .new-beans-area{
         width: 100%;
         padding: 0 12px;

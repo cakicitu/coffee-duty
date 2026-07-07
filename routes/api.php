@@ -20,6 +20,7 @@ Route::middleware('api.token')->group(function () {
 
     Route::get('/bean', [BeanController::class, 'index']);
     Route::post('/bean', [BeanController::class, 'store']);
+    Route::put('/bean/{bean}/rename', [BeanController::class, 'rename']);
 });
 
 Route::post('/like', [LikeController::class, 'store'])->middleware(['auth']);
