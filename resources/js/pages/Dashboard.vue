@@ -198,7 +198,7 @@ const addDrank = async (user: User) => {
 }
 .user-container{
     width: 100%;
-    padding: 20px 16px 10px;
+    padding: 20px 24px 10px;
     display: flex;
     justify-content: center;
     align-items: stretch;
@@ -254,7 +254,7 @@ const addDrank = async (user: User) => {
     .user-container{
         flex-direction: column;
         align-items: stretch;
-        padding: 16px 12px 12px;
+        padding: 16px 16px 12px;
         gap: 10px;
     }
     .users{
