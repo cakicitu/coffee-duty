@@ -72,6 +72,11 @@ let dueDate = computed(() => {
 
 const createNewBeanRotation = async () => {
     try {
+        const body = {};
+        if (currentBeans.value) {
+            body.beanId = currentBeans.value.id;
+        }
+
         const response = await fetch('/api/bean', {
             method: 'POST',
             headers: {
@@ -79,7 +84,7 @@ const createNewBeanRotation = async () => {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
             },
             credentials: 'include',
-            body: JSON.stringify({beanId: currentBeans.value.id})
+            body: JSON.stringify(body)
         });
 
         if (!response.ok) {
