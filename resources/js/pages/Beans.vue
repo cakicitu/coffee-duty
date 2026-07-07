@@ -247,12 +247,15 @@ const dislikeCurrentBeans = async () => {
                             </thead>
                             <tbody>
                                 <tr v-for="bean in beans" :class="{ active: !bean.finished }">
-                                    <td data-label="name" @click="startEdit(bean)" style="cursor:pointer;">
-                                        <template v-if="editingId === bean.id">
+                                    <td data-label="name">
+                                        <template v-if="editingId === bean.id" style="display:inline-flex; align-items:center; gap:4px;">
                                             <input v-model="editName" class="inline-edit-input" @keyup.enter="saveName(bean)" @blur="saveName(bean)" @keyup.escape="cancelEdit" autofocus />
                                         </template>
                                         <template v-else>
-                                            {{ bean.name }}
+                                            <span class="bean-name-cell">
+                                                {{ bean.name }}
+                                                <span class="edit-icon" @click.stop="startEdit(bean)" title="Rename">✏️</span>
+                                            </span>
                                         </template>
                                     </td>
                                     <td data-label="count">{{ bean.count }} cups</td>
@@ -318,6 +321,24 @@ const dislikeCurrentBeans = async () => {
     padding: 2px 6px;
     width: 120px;
     outline: none;
+}
+
+.bean-name-cell{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.edit-icon{
+    cursor: pointer;
+    opacity: 0.4;
+    font-size: 14px;
+    transition: opacity 0.15s;
+    line-height: 1;
+}
+
+.edit-icon:hover{
+    opacity: 1;
 }
 
 .button{
