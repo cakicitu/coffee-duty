@@ -21,15 +21,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                 <div class="body">
                     <div class="title">
-                        <h1 style="font-size: 20px;" ">Hilfe</h1>
+                        <h1 style="font-size: 20px;">Hilfe</h1>
                     </div>
                   
                     <div class="help-text">
-                        <h1 style="font-size: 20px;" ">Wie bediene ich wann was ?????</h1>
+                        <h1 style="font-size: 20px;">Wie bediene ich wann was ?????</h1>
                         <br>
                         <b>Ich habe Kaffe besorgt. Was mache ich jetzt ?</b> => ich gehe auf der Homepage auf Dashboard und drücke auf den Button "I got the Beans". <b>Achtung!</b> Dieser Button erscheint erst wenn man dran ist.
                         <br>
@@ -43,7 +43,7 @@ const breadcrumbs: BreadcrumbItem[] = [
                         <b>Ich will die Kaffeebohnen bewerten. Wie mache ich das ?</b>Auf dem Homepage unter Beans ist folgede Frage zu sehen "Do you like the current beans?" sofern man noch keine Bewertung für diese Bohnen abgegeben hat. Durch betätigen des "Like" oder "Dislike" Buttons gibt man seine Bewertung ab. Diese ist nicht änderbar und auf 1 pro User pro Packung Bohnen begrenzt. Sobald die Bewertung abgegeben ist erscheint der Eintrag in der Tabelle under likes und dislikes.
                         <br>
                         <br>
-                        <h1 style="font-size: 20px;" ">Weitere Infos</h1>
+                        <h1 style="font-size: 20px;">Weitere Infos</h1>
                         <b>Welche Infos stehen mir zu Verfügung ???</b>
                         <br>
                         <br>
