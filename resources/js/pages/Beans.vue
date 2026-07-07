@@ -42,6 +42,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 let showLikeButtons = ref(true);
 
+let beanName = ref('');
+
 let beans = ref<Bean[]>(page.props.beans as Bean[])
 
 let hasEval = page.props.hasEval
@@ -75,6 +77,9 @@ const createNewBeanRotation = async () => {
         const body = {};
         if (currentBeans.value) {
             body.beanId = currentBeans.value.id;
+        }
+        if (beanName.value) {
+            body.name = beanName.value;
         }
 
         const response = await fetch('/api/bean', {
@@ -178,7 +183,10 @@ const dislikeCurrentBeans = async () => {
                         <h1 style="font-size: 20px;" v-if="beans && beans.length > 1"><b style="color: rgb(21, 187, 21);">New</b> Beans are due in: {{ dueDate }} days.</h1>
                         <span v-else>The forecast is available as soon as there is one full rotation.</span>
                     </div>
-                    <div class="button" @click="createNewBeanRotation">I put in new beans</div>
+                    <div class="new-beans-area">
+                        <input v-model="beanName" type="text" placeholder="Bean name (e.g. Paco's Finest)" class="bean-name-input" @keyup.enter="createNewBeanRotation" />
+                        <div class="button" @click="createNewBeanRotation">I put in new beans</div>
+                    </div>
 
                     <div class="eval_area" v-if="!hasEval && showLikeButtons">
                         <h1 style="font-size: 20px;" >Do you like the current beans?</h1>
@@ -236,11 +244,46 @@ const dislikeCurrentBeans = async () => {
     padding: 0 12px;
     text-align: center;
 }
+.new-beans-area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.bean-name-input{
+    padding: 7px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: inherit;
+    font-size: 15px;
+    width: 260px;
+    max-width: 90%;
+    text-align: center;
+    outline: none;
+}
+
+.bean-name-input:focus{
+    border-color: rgb(78, 75, 240);
+}
+
 .button{
     cursor: pointer;
     background-color: rgb(21, 187, 21);
     padding: 7px 12px;
     border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .new-beans-area{
+        width: 100%;
+        padding: 0 12px;
+    }
+    .bean-name-input{
+        width: 100%;
+    }
 }
 
 .table-wrap{

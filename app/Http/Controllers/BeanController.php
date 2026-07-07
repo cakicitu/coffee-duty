@@ -55,7 +55,9 @@ class BeanController extends Controller
             }
         }
 
-        Bean::create();
+        Bean::create([
+            'name' => $request->input('name', 'unnamed'),
+        ]);
 
         $beans = Bean::with('likes', 'dislikes')->orderBy('id', 'desc')->get();
         $currentBeans = Bean::where('finished', false)->first();
