@@ -41,6 +41,9 @@ Route::get('beans', function () {
 
 })->middleware(['auth', 'verified'])->name('beans');
 
+Route::get('cleaning', [App\Http\Controllers\CleaningController::class, 'page'])
+    ->middleware(['auth', 'verified'])->name('cleaning');
+
 Route::get('help', function () {
 
     return Inertia::render('Help', [

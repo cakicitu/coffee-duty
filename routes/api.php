@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BeanController;
+use App\Http\Controllers\CleaningController;
 use App\Http\Controllers\DislikeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
@@ -21,6 +22,9 @@ Route::middleware('api.token')->group(function () {
     Route::get('/bean', [BeanController::class, 'index']);
     Route::post('/bean', [BeanController::class, 'store']);
     Route::put('/bean/{bean}/rename', [BeanController::class, 'rename']);
+
+    Route::get('/cleaning', [CleaningController::class, 'current']);
+    Route::post('/cleaning/done', [CleaningController::class, 'markDone']);
 });
 
 Route::post('/like', [LikeController::class, 'store'])->middleware(['auth']);
