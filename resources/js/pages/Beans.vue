@@ -40,6 +40,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+// The logged-in user, needed so the backend knows who brought the beans
+const me = computed(() => page.props.auth.user)
+
 let showLikeButtons = ref(true);
 
 let beanName = ref('');
@@ -56,31 +59,28 @@ let currentBeans = ref<Bean>(page.props.currentBeans as Bean)
 // let likes = ref<Like[]>(page.props.beans as Bean[])
 
 
+// Average number of days a finished bean pack lasted
 let averageDuration = computed(() => {
-    if (beans){
-        const finishedBeans = beans.value.filter(bean => bean.finished);
-        
-        if (!beans || finishedBeans.length === 0) return 0;
-        
-        const totalLasted = finishedBeans.reduce((sum, bean) => sum + bean.lasted, 0);
-        
-        return totalLasted / finishedBeans.length;
-    }else{
-        return 0
-    }
+    const finishedBeans = beans.value.filter(bean => bean.finished);
 
+    if (finishedBeans.length === 0) return 0;
+
+    const totalLasted = finishedBeans.reduce((sum, bean) => sum + bean.lasted, 0);
+
+    return totalLasted / finishedBeans.length;
 });
 
+// Days until new beans are due, based on the average pack duration
 let dueDate = computed(() => {
+    if (!currentBeans.value) return null;
+
     return (averageDuration.value - currentBeans.value.lasted).toFixed(2)
 });
 
+// Swaps in a new bean pack; the backend advances the rotation if I was the selected user
 const createNewBeanRotation = async () => {
     try {
-        const body = {};
-        if (currentBeans.value) {
-            body.beanId = currentBeans.value.id;
-        }
+        const body: { user: number; name?: string } = { user: me.value.id };
         if (beanName.value) {
             body.name = beanName.value;
         }
@@ -213,7 +213,7 @@ const dislikeCurrentBeans = async () => {
                     <div class="title">
                         <h1 style="font-size: 20px;" v-if="currentBeans">The <b style="color: rgb(78, 75, 240);">current</b> Beans are in for: {{ currentBeans.lasted }} days.</h1>
                         <span v-else>There arent beans in the machine.</span>
-                        <h1 style="font-size: 20px;" v-if="beans && beans.length > 1"><b style="color: rgb(21, 187, 21);">New</b> Beans are due in: {{ dueDate }} days.</h1>
+                        <h1 style="font-size: 20px;" v-if="currentBeans && beans && beans.length > 1"><b style="color: rgb(21, 187, 21);">New</b> Beans are due in: {{ dueDate }} days.</h1>
                         <span v-else>The forecast is available as soon as there is one full rotation.</span>
                     </div>
                     <div class="new-beans-area">

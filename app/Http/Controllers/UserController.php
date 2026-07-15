@@ -19,16 +19,26 @@ class UserController extends Controller
      */
     public function selectJob()
     {
-        // Set the currently selected user to finished and not selected
+        // Unselect the current duty user and credit them for the beans they brought
         User::where('selected', true)->increment('count', 1, [
             'selected' => false,
         ]);
 
-        // Get all users where finished is false
-        $availableUsers = User::all();
+        // Users marked as finished sit out the rotation; fall back to everyone if all sit out
+        $availableUsers = User::where('finished', false)->get();
+        if ($availableUsers->isEmpty()) {
+            $availableUsers = User::all();
+        }
 
-        // Get user with highest drank
-        $selectedUser = $availableUsers->sortByDesc('drank')->first();
+        if ($availableUsers->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No users available for coffee duty',
+            ], 422);
+        }
+
+        // Pick the highest drank; ties go to whoever has brought beans the fewest times
+        $selectedUser = $availableUsers->sortBy('count')->sortByDesc('drank')->first();
         $total = $selectedUser->total + $selectedUser->drank;
         $selectedUser->update(['selected' => true, 'total' => $total, 'drank' => 0]);
 
@@ -67,15 +77,21 @@ class UserController extends Controller
         return $response;
     }
 
+    /**
+     * Return all users; auto-selects a duty user if none is selected
+     * so clients always see a coffee-getter.
+     */
     public function getAllUsers()
     {
-
         $selectedUser = User::where('selected', true)->first();
 
-        $availableUsers = User::all();
+        $availableUsers = User::where('finished', false)->get();
+        if ($availableUsers->isEmpty()) {
+            $availableUsers = User::all();
+        }
 
-        if (! $selectedUser) {
-            $selectedUser = $availableUsers->sortByDesc('drank')->first();
+        if (! $selectedUser && $availableUsers->isNotEmpty()) {
+            $selectedUser = $availableUsers->sortBy('count')->sortByDesc('drank')->first();
             $total = $selectedUser->total + $selectedUser->drank;
             $selectedUser->update(['selected' => true, 'total' => $total, 'drank' => 0]);
         }
@@ -90,10 +106,20 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Toggle the coffee-duty selection for a user (admin action).
+     * Only one user can be selected at a time.
+     */
     public function toggleSelected($id)
     {
-        $user = User::find($id);
-        $user->selected = ! $user->selected;
+        $user = User::findOrFail($id);
+        $shouldSelect = ! $user->selected;
+
+        if ($shouldSelect) {
+            User::where('selected', true)->update(['selected' => false]);
+        }
+
+        $user->selected = $shouldSelect;
         $user->save();
 
         // Return all users
@@ -106,10 +132,14 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Toggle whether a user sits out the coffee rotation
+     * (e.g. vacation or left the office).
+     */
     public function toggleFinished($id)
     {
-        $user = User::find($id);
-        $user->count = $user->count + 1;
+        $user = User::findOrFail($id);
+        $user->finished = ! $user->finished;
         $user->save();
 
         // Return all users
@@ -121,15 +151,19 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Register one drunk cup for a user and count it against the current beans
+     */
     public function addDrank($id)
     {
-        $user = User::find($id);
-        $user->drank = $user->drank + 1;
-        $user->save();
+        $user = User::findOrFail($id);
+        $user->increment('drank');
 
+        // The cup still counts for the user even when no beans are tracked yet
         $currentBeans = Bean::where('finished', false)->first();
-        $currentBeans->count = $currentBeans->count + 1;
-        $currentBeans->save();
+        if ($currentBeans) {
+            $currentBeans->increment('count');
+        }
 
         $allUsers = User::all();
 

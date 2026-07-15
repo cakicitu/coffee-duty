@@ -23,10 +23,16 @@ class BeanController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Finish the current beans, start a new pack, and credit the bringer.
+     * Rotation only advances when the bringer is the selected duty user.
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'nullable|string|max:255',
+            'user' => 'nullable|integer',
+        ]);
+
         $oldBeans = Bean::where('finished', false)->first();
 
         if ($oldBeans) {
@@ -68,6 +74,9 @@ class BeanController extends Controller
         ];
     }
 
+    /**
+     * Rename an existing bean pack
+     */
     public function rename(Request $request, Bean $bean)
     {
         $request->validate(['name' => 'required|string|max:255']);

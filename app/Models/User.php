@@ -54,8 +54,15 @@ class User extends Authenticatable
         ];
     }
 
+    // Bean ratings given by this user
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    // Weekly cleaning duties assigned to this user
+    public function cleaningDuties(): HasMany
+    {
+        return $this->hasMany(CleaningDuty::class);
     }
 }

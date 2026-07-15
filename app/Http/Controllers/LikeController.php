@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bean;
+use App\Models\Dislike;
 use App\Models\Like;
 use Illuminate\Http\Request;
 
@@ -23,14 +24,18 @@ class LikeController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'beanId' => 'required|integer|exists:beans,id',
+        ]);
 
         $user = $request->user();
-        $likeVal = $request->get('like');
-        $beanId = $request->get('beanId');
 
-        $like = Like::create([
+        // A user has one evaluation per bean, so liking replaces any dislike
+        Dislike::where('user_id', $user->id)->where('bean_id', $validated['beanId'])->delete();
+
+        $like = Like::firstOrCreate([
             'user_id' => $user->id,
-            'bean_id' => $beanId,
+            'bean_id' => $validated['beanId'],
         ]);
 
         $beans = Bean::orderBy('id', 'desc')->get();

@@ -170,9 +170,9 @@ const addDrank = async (user: User) => {
                             <div class="toogle-selected"  @click="toggleSelected(user)" v-if="me.isAdmin">
                                 toggle selected
                             </div>
-                             <!-- <div class="toogle-finished"  @click="toggleFinished(user)" v-if="me.isAdmin">
+                            <div class="toogle-finished"  @click="toggleFinished(user)" v-if="me.isAdmin">
                                 toggle finished
-                            </div> -->
+                            </div>
                             <div class="add-drank"  @click="addDrank(user)" v-if="me.isAdmin">
                                 add drank
                             </div>
@@ -266,6 +266,7 @@ const addDrank = async (user: User) => {
     }
     .button,
     .toogle-selected,
+    .toogle-finished,
     .add-drank{
         padding: 12px;
         /* comfortable touch targets */

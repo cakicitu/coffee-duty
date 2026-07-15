@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Like extends Model
 {
@@ -11,13 +12,15 @@ class Like extends Model
         'bean_id',
     ];
 
+    // The user who gave this rating
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class);
     }
 
+    // The bean pack this rating belongs to
     public function bean(): BelongsTo
     {
-        return $this->belongsTo(Bean::class, 'id');
+        return $this->belongsTo(Bean::class);
     }
 }

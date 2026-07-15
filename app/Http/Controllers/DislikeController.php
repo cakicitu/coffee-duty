@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bean;
 use App\Models\Dislike;
+use App\Models\Like;
 use Illuminate\Http\Request;
 
 class DislikeController extends Controller
@@ -29,13 +30,18 @@ class DislikeController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->user();
-        $likeVal = $request->get('like');
-        $beanId = $request->get('beanId');
+        $validated = $request->validate([
+            'beanId' => 'required|integer|exists:beans,id',
+        ]);
 
-        $dislike = Dislike::create([
+        $user = $request->user();
+
+        // A user has one evaluation per bean, so disliking replaces any like
+        Like::where('user_id', $user->id)->where('bean_id', $validated['beanId'])->delete();
+
+        $dislike = Dislike::firstOrCreate([
             'user_id' => $user->id,
-            'bean_id' => $beanId,
+            'bean_id' => $validated['beanId'],
         ]);
 
         $beans = Bean::orderBy('id', 'desc')->get();
