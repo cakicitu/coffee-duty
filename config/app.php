@@ -67,6 +67,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Base Path
+    |--------------------------------------------------------------------------
+    |
+    | Sub-path the app is served under (e.g. "coffee-duty" when hosted at
+    | https://example.com/coffee-duty). Every route is prefixed with it.
+    | Leave empty to serve the app from the domain root.
+    |
+    */
+
+    'base_path' => trim(env('APP_BASE_PATH', ''), '/'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { appUrl } from '@/lib/utils';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
@@ -34,7 +35,7 @@ let coffeeGetter = computed(() => users.value.find((user: User) => user.selected
 
 const selectNewCoffeeGetter = async () => {
     try {
-        const response = await fetch('/api/user/job/select', {
+        const response = await fetch(appUrl('/api/user/job/select'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -63,7 +64,7 @@ const selectNewCoffeeGetter = async () => {
 
 const toggleFinished = async (user: User) => {
     try {
-        const response = await fetch('/api/user/'+user.id+'/toggle/finished', {
+        const response = await fetch(appUrl('/api/user/'+user.id+'/toggle/finished'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ const toggleFinished = async (user: User) => {
 
 const toggleSelected = async (user: User) => {
     try {
-        const response = await fetch('/api/user/'+user.id+'/toggle/selected', {
+        const response = await fetch(appUrl('/api/user/'+user.id+'/toggle/selected'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,7 +122,7 @@ const toggleSelected = async (user: User) => {
 
 const addDrank = async (user: User) => {
     try {
-        const response = await fetch('/api/user/'+user.id+'/add/drank', {
+        const response = await fetch(appUrl('/api/user/'+user.id+'/add/drank'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { appUrl } from '@/lib/utils';
+import { login } from '@/routes';
 import { Head, Link } from '@inertiajs/vue3';
 </script>
 
@@ -19,7 +21,7 @@ import { Head, Link } from '@inertiajs/vue3';
                 >
                     <h3 class="mb-10 font-medium">Get your beans now:</h3>
                     <Link
-                        :href="'/login'"
+                        :href="login()"
                         class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                     >
                         Log in
@@ -29,7 +31,7 @@ import { Head, Link } from '@inertiajs/vue3';
                     style="background-color: white;"
                     class="flex flex-1 items-center justify-center rounded-br-lg rounded-bl-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-tl-lg lg:rounded-br-none lg:p-20 dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"
                 >
-                    <img src="/images/coffee-duty-logo.png" alt="Coffee Duty" class="h-auto w-40 max-w-full" />
+                    <img :src="appUrl('/images/coffee-duty-logo.png')" alt="Coffee Duty" class="h-auto w-40 max-w-full" />
                 </div>
             </main>
         </div>

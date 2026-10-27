@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'home' => '/dashboard',
+    'home' => '/'.ltrim(trim(env('APP_BASE_PATH', ''), '/').'/dashboard', '/'),
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ return [
     |
     */
 
-    'prefix' => '',
+    'prefix' => trim(env('APP_BASE_PATH', ''), '/'),
 
     'domain' => null,
 

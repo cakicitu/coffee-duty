@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { appUrl } from '@/lib/utils';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
@@ -46,7 +47,7 @@ const canConfirm = computed(() => {
 // Confirms this week's cleaning job and refreshes duty and stats from the server
 const confirmCleaningDone = async () => {
     try {
-        const response = await fetch('/api/cleaning/done', {
+        const response = await fetch(appUrl('/api/cleaning/done'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

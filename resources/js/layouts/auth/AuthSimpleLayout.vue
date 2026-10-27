@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { appUrl } from '@/lib/utils';
 import { home } from '@/routes';
 import { Link } from '@inertiajs/vue3';
 
@@ -14,7 +15,7 @@ defineProps<{
             <div class="flex flex-col gap-8">
                 <div class="flex flex-col items-center gap-4">
                     <Link :href="home()" class="flex flex-col items-center gap-2 font-medium">
-                        <img src="/images/coffee-duty-logo.png" alt="Coffee Duty" class="h-14 w-auto" />
+                        <img :src="appUrl('/images/coffee-duty-logo.png')" alt="Coffee Duty" class="h-14 w-auto" />
                         <span class="sr-only">{{ title }}</span>
                     </Link>
                     <div class="space-y-2 text-center">

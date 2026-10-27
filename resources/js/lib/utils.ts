@@ -13,3 +13,10 @@ export function urlIsActive(urlToCheck: NonNullable<InertiaLinkProps['href']>, c
 export function toUrl(href: NonNullable<InertiaLinkProps['href']>) {
     return typeof href === 'string' ? href : href?.url;
 }
+
+const basePath = (import.meta.env.VITE_APP_BASE_PATH ?? '').replace(/^\/*/, '/').replace(/\/+$/, '');
+
+/** Prefix a root-relative path with the app's base path (APP_BASE_PATH). */
+export function appUrl(path: string) {
+    return basePath + path;
+}

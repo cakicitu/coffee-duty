@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { appUrl } from '@/lib/utils';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
@@ -85,7 +86,7 @@ const createNewBeanRotation = async () => {
             body.name = beanName.value;
         }
 
-        const response = await fetch('/api/bean', {
+        const response = await fetch(appUrl('/api/bean'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -127,7 +128,7 @@ const cancelEdit = () => {
 const saveName = async (bean) => {
     if (!editName.value.trim()) { cancelEdit(); return; }
     try {
-        const res = await fetch(`/api/bean/${bean.id}/rename`, {
+        const res = await fetch(appUrl(`/api/bean/${bean.id}/rename`), {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '' },
@@ -147,7 +148,7 @@ const saveName = async (bean) => {
 const likeCurrentBeans = async () => {
     try {
         showLikeButtons.value = false;
-        const response = await fetch('/api/like', {
+        const response = await fetch(appUrl('/api/like'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -176,7 +177,7 @@ const likeCurrentBeans = async () => {
 const dislikeCurrentBeans = async () => {
     try {
         showLikeButtons.value = false;
-        const response = await fetch('/api/dislike', {
+        const response = await fetch(appUrl('/api/dislike'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
